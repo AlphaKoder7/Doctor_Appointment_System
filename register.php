@@ -15,6 +15,7 @@
             <input type="text" name="name" placeholder="Full Name" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
             <select name="role" required>
                 <option value="patient">Patient</option>
                 <option value="doctor">Doctor</option>
@@ -35,8 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
     $role = $_POST["role"];
+    $phone = $_POST["phone"];
 
-    $sql = "INSERT INTO users (name, email, password, role) VALUES ('$name', '$email', '$password', '$role')";
+    $sql = "INSERT INTO users (name, email, password, role, phone) VALUES ('$name', '$email', '$password', '$role', '$phone')";
     if ($conn->query($sql) === TRUE) {
         echo "Registration successful! <a href='login.php'>Login here</a>";
     } else {

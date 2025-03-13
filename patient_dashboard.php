@@ -15,6 +15,17 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "patient") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .approved {
+            color: green;
+        }
+        .rejected {
+            color: red;
+        }
+        .pending {
+            color: orange;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -28,21 +39,21 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "patient") {
         <!-- Book an Appointment -->
         <h2>Book an Appointment</h2>
         <form method="POST" action="book_appointment.php">
-    <label>Select Doctor:</label>
-    <select name="doctor_id" required>
-        <option value="" disabled selected>-- Select a Doctor --</option>
-        <?php
-        $doctors = $conn->query("SELECT * FROM users WHERE role='doctor'");
-        while ($doc = $doctors->fetch_assoc()) {
-            echo "<option value='{$doc["id"]}'>{$doc["name"]}</option>";
-        }
-        ?>
-    </select>
-    
-    <label>Date & Time:</label>
-    <input type="datetime-local" name="appointment_date" required>
-    <button type="submit">Book</button>
-</form>
+            <label>Select Doctor:</label>
+            <select name="doctor_id" required>
+                <option value="" disabled selected>-- Select a Doctor --</option>
+                <?php
+                $doctors = $conn->query("SELECT * FROM users WHERE role='doctor'");
+                while ($doc = $doctors->fetch_assoc()) {
+                    echo "<option value='{$doc["id"]}'>{$doc["name"]}</option>";
+                }
+                ?>
+            </select>
+            
+            <label>Date & Time:</label>
+            <input type="datetime-local" name="appointment_date" required>
+            <button type="submit">Book</button>
+        </form>
 
 
         <!-- Display Appointments -->
@@ -52,6 +63,7 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "patient") {
                 <th>Doctor Name</th>
                 <th>Date & Time</th>
                 <th>Status</th>
+                <th>Message</th>
             </tr>
             <?php
             $patient_id = $_SESSION["user_id"];
@@ -61,10 +73,12 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "patient") {
                                     WHERE a.patient_id='$patient_id'");
 
             while ($row = $result->fetch_assoc()) {
+                $statusClass = strtolower($row['status']);
                 echo "<tr>
                         <td>{$row['doctor_name']}</td>
                         <td>{$row['appointment_date']}</td>
-                        <td>{$row['status']}</td>
+                        <td class='$statusClass'>" . ucfirst($row['status']) . "</td>
+                        <td>" . (empty($row['message']) ? "-" : $row['message']) . "</td>
                       </tr>";
             }
             ?>
