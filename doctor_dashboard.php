@@ -1,21 +1,18 @@
 <?php
-// Start session only if it's not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 include "db.php";
 
-// Redirect if not logged in or not a doctor
 if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "doctor") {
     header("Location: login.php");
     exit;
 }
 
-// First, check if you need to add a 'message' column to the appointments table
 $check_column = $conn->query("SHOW COLUMNS FROM appointments LIKE 'message'");
 if ($check_column->num_rows == 0) {
-    // Add message column if it doesn't exist
+
     $conn->query("ALTER TABLE appointments ADD COLUMN message TEXT AFTER status");
 }
 ?>
@@ -110,7 +107,6 @@ if ($check_column->num_rows == 0) {
         </table>
     </main>
     
-    <!-- Rejection Modal -->
     <div id="rejectModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>

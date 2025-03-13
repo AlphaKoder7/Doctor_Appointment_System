@@ -4,7 +4,6 @@ include "db.php";
 
 header('Content-Type: application/json');
 
-// Check if user is logged in as doctor
 if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "doctor") {
     echo json_encode(["success" => false, "message" => "Unauthorized access"]);
     exit;
@@ -16,9 +15,8 @@ if (!isset($_GET["id"])) {
 }
 
 $appointment_id = $_GET["id"];
-$message = "See you at the hospital"; // Default approval message
+$message = "See you at the hospital"; 
 
-// Update the appointment status and add message
 $stmt = $conn->prepare("UPDATE appointments SET status = 'approved', message = ? WHERE id = ? AND doctor_id = ?");
 $stmt->bind_param("sii", $message, $appointment_id, $_SESSION["user_id"]);
 

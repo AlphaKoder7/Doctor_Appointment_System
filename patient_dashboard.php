@@ -36,7 +36,6 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "patient") {
     </header>
 
     <main>
-        <!-- Book an Appointment -->
         <h2>Book an Appointment</h2>
         <form method="POST" action="book_appointment.php">
             <label>Select Doctor:</label>
@@ -55,8 +54,6 @@ if (!isset($_SESSION["user_id"]) || $_SESSION["role"] != "patient") {
             <button type="submit">Book</button>
         </form>
 
-
-        <!-- Display Appointments -->
         <h2>My Appointments</h2>
         <table>
             <tr>

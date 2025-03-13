@@ -14,13 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        if (password_verify($password, $user["password"])) {
-            // Set session variables based on actual user role
-            $_SESSION["user_id"] = $user["id"];
-            $_SESSION["name"] = $user["name"];
+            if (password_verify($password, $user["password"])) {
+                $_SESSION["user_id"] = $user["id"];
+                $_SESSION["name"] = $user["name"];
             $_SESSION["role"] = $user["role"];
 
-            // Redirect based on role
             if ($user["role"] == "admin") {
                 header("Location: admin.php");
             } elseif ($user["role"] == "doctor") {
